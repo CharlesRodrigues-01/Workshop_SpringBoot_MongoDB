@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 import com.charles.workshop.domain.User;
 
 @Repository
-public interface UserRepository extends MongoRepository<User, String> {
+public interface UserRepository extends MongoRepository<User, Long> {
 
+	User findById(String id);
+	User deleteById(String id);
 }

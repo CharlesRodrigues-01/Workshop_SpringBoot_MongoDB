@@ -1,8 +1,6 @@
 package com.charles.workshop.Services;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,19 +20,36 @@ public class UserService {
 	}
 
 	public User findById(String id) {
-		Optional<User> user = userRepository.findById(id);
-		return user.orElseThrow(() -> new ObjectNotFoundException("Object not found!"));
+		User user = userRepository.findById(id);
+		if(user == null) {
+			throw new ObjectNotFoundException("Object not found!");
+		}
+		return user;
 
 	}
 
 	public User insert(User obj) {
 
-		return userRepository.insert(obj);
+		return userRepository.save(obj);
 	}
-	
+
 	public void delete(String id) {
 		findById(id);
 		userRepository.deleteById(id);
+	}
+
+	public User update(String id, User obj) {
+
+		User newObj = userRepository.findById(id);
+		updateData(newObj, obj);
+		return userRepository.save(newObj);
+
+	}
+
+	private void updateData(User newObj, User obj) {
+		newObj.setName(obj.getName());
+		newObj.setEmail(obj.getEmail());
+
 	}
 
 	public User fromDTO(UserDTO objDto) {
